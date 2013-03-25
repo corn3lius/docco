@@ -170,7 +170,7 @@
 
       lang = getLanguage(source, config);
       if (!lang) {
-        console.warn("docco: skipped unknown type (" + m + ")");
+        console.warn("docco: skipped unknown type (" + lang + ")");
       }
       return lang;
     }).sort();
@@ -226,9 +226,16 @@
       args = process.argv;
     }
     c = config;
-    commander.version(version).usage('[options] files').option('-l, --layout [name]', 'choose a layout (parallel, linear or classic)', c.layout).option('-o, --output [path]', 'output to a given folder', c.output).option('-c, --css [file]', 'use a custom css file', c.css).option('-t, --template [file]', 'use a custom .jst template', c.template).option('-e, --extension [ext]', 'assume a file extension for all inputs', c.extension).parse(args).name = "docco";
+    commander.version(version).usage('[options] files').option('-r, --recursive', 'recursively generate docs', c.recursive).option('-l, --layout [name]', 'choose a layout (parallel, linear or classic)', c.layout).option('-o, --output [path]', 'output to a given folder', c.output).option('-c, --css [file]', 'use a custom css file', c.css).option('-t, --template [file]', 'use a custom .jst template', c.template).option('-e, --extension [ext]', 'assume a file extension for all inputs', c.extension).parse(args).name = "docco";
     if (commander.args.length) {
-      return document(commander);
+      if (commander.recursive) {
+        var src = commander.args[0];
+        var dest = commander.output ? commander.output : path.normalize(__dirname + '/../docs');
+        var recursive_docco = require(__dirname + '/lib/recursive_docco');
+        return recursive_docco.recurse(src, dest);
+      } else {
+        return document(commander);
+      }
     } else {
       return console.log(commander.helpInformation());
     }
