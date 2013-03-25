@@ -22,6 +22,7 @@ Usage: docco [options] FILES
 
     -h, --help             output usage information
     -V, --version          output the version number
+    -r, --recursive        recursively generate documentation
     -l, --layout [layout]  choose a built-in layouts (parallel, linear)
     -c, --css [file]       use a custom css file
     -o, --output [path]    use a custom output path
